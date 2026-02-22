@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Kindlings</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+  <script>(function(){var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);})();</script>
+</head>
+<body data-page="kindlings">
+  <header class="header">
+    <div class="brand">
+      <h1>Rabbit Ranch</h1>
+      <nav class="nav">
+        <a href="/dashboard">Dashboard</a>
+        <a href="/ranch/animals">Animals</a>
+        <a href="/ranch/breedings">Breedings</a>
+        <a class="active" href="/ranch/kindlings">Kindlings</a>
+        <a href="/ranch/weanings">Weanings</a>
+        <a href="/ranch/harvests">Harvests</a>
+        <a href="/ranch/sales">Sales</a>
+        <a href="/ranch/feed-costs">Feed Costs</a>
+        <a href="/ranch/reports">Reports</a>
+      </nav>
+    </div>
+    <div class="header-actions">
+            <button id="themeToggle" class="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">🌙</button>
+      <button id="refreshBtn">Refresh</button>
+      <a href="/docs" target="_blank" rel="noopener">API Docs</a>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="two-col">
+      <div class="card">
+        <h2>Create Litter (Kindling)</h2>
+        <form id="litterForm" class="form">
+          <label>Breeding
+            <select id="breedingForLitter" name="breeding_id" required>
+              <option value="">Select breeding…</option>
+            </select>
+          </label>
+          <label>Kindling Date<input type="date" name="kindling_date" required /></label>
+          <label>Born Alive<input type="number" name="born_alive" min="0" required /></label>
+          <label>Born Dead<input type="number" name="born_dead" min="0" value="0" /></label>
+          <label>Weaned Count<input type="number" name="weaned_count" min="0" /></label>
+          <label>Notes<input name="notes" /></label>
+          <button type="submit">Save Litter</button>
+        </form>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <h2>Litters</h2>
+          <div class="actions-row">
+            <input id="litterFilter" class="filter" placeholder="Filter (breeding/date)…" />
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table id="littersTable">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Breeding</th>
+                <th>Kindled</th>
+                <th>Alive</th>
+                <th>Dead</th>
+                <th>Weaned</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Edit Litter Modal -->
+  <div id="editModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 id="modalTitle">Edit Litter</h2>
+        <button class="modal-close" id="modalClose" aria-label="Close">✕</button>
+      </div>
+      <div class="modal-form">
+        <input type="hidden" id="modalLitterId" />
+        <label>Kindling Date
+          <input type="date" id="modalKindlingDate" />
+        </label>
+        <label>Born Alive
+          <input type="number" id="modalBornAlive" min="0" />
+        </label>
+        <label>Born Dead
+          <input type="number" id="modalBornDead" min="0" />
+        </label>
+        <label>Weaned Count
+          <input type="number" id="modalWeanedCount" min="0" />
+        </label>
+        <label class="full">Notes
+          <input type="text" id="modalNotes" />
+        </label>
+      </div>
+      <div class="modal-footer">
+        <button id="modalCancel">Cancel</button>
+        <button class="btn-save" id="modalSave">Save Changes</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast" hidden></div>
+  <script src="/static/app.js"></script>
+</body>
+</html>

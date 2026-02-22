@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Feed Costs</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+  <script>(function(){var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);})();</script>
+</head>
+<body data-page="feed-costs">
+  <header class="header">
+    <div class="brand">
+      <h1>Rabbit Ranch</h1>
+      <nav class="nav">
+        <a href="/dashboard">Dashboard</a>
+        <a href="/ranch/animals">Animals</a>
+        <a href="/ranch/breedings">Breedings</a>
+        <a href="/ranch/kindlings">Kindlings</a>
+        <a href="/ranch/weanings">Weanings</a>
+        <a href="/ranch/harvests">Harvests</a>
+        <a href="/ranch/sales">Sales</a>
+        <a class="active" href="/ranch/feed-costs">Feed Costs</a>
+        <a href="/ranch/reports">Reports</a>
+      </nav>
+    </div>
+    <div class="header-actions">
+            <button id="themeToggle" class="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">🌙</button>
+      <button id="refreshBtn">Refresh</button>
+      <a href="/docs" target="_blank" rel="noopener">API Docs</a>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="two-col">
+      <div class="card">
+        <h2>Record Feed Cost</h2>
+        <form id="feedCostForm" class="form">
+          <label>Date<input type="date" name="date" required /></label>
+          <label>Description<input name="description" placeholder="e.g. 50lb pellets, hay bale" /></label>
+          <label>Cost Per Unit ($)<input type="number" name="cost_per_unit" min="0" step="0.01" placeholder="Optional" /></label>
+          <label>Total Cost ($)<input type="number" name="total_cost" min="0" step="0.01" required /></label>
+          <button type="submit">Save Entry</button>
+        </form>
+
+        <hr class="divider" />
+
+        <div class="card" style="padding: 10px; margin-top: 0;">
+          <div class="label">Total Feed Spend (all time)</div>
+          <div class="value" id="fc_total">—</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <h2>Feed Cost Entries</h2>
+          <div class="actions-row">
+            <input id="feedCostFilter" class="filter" placeholder="Filter (description/date)…" />
+          </div>
+        </div>
+        <div class="hint" id="feedCostCount">—</div>
+        <div class="table-wrap">
+          <table id="feedCostsTable">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Date</th>
+                <th>Description</th>
+                <th>$/Unit</th>
+                <th>Total ($)</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="toast" class="toast" hidden></div>
+  <script src="/static/app.js"></script>
+</body>
+</html>

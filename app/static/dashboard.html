@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dashboard — Rabbit Ranch</title>
+  <script>(function(){var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);})();</script>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body data-page="dashboard">
+  <header class="header">
+    <div class="brand">
+      <h1>Rabbit Ranch</h1>
+      <nav class="nav">
+        <a class="active" href="/dashboard">Dashboard</a>
+        <a href="/ranch/animals">Animals</a>
+        <a href="/ranch/breedings">Breedings</a>
+        <a href="/ranch/kindlings">Kindlings</a>
+        <a href="/ranch/weanings">Weanings</a>
+        <a href="/ranch/harvests">Harvests</a>
+        <a href="/ranch/sales">Sales</a>
+        <a href="/ranch/feed-costs">Feed Costs</a>
+        <a href="/ranch/reports">Reports</a>
+      </nav>
+    </div>
+    <div class="header-actions">
+      <button id="themeToggle" class="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">🌙</button>
+      <button id="refreshBtn">Refresh</button>
+      <a href="/docs" target="_blank" rel="noopener">API Docs</a>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="grid">
+      <div class="card"><div class="label">Total Litters</div><div class="value" id="m_total_litters">—</div></div>
+      <div class="card"><div class="label">Avg Litter Size</div><div class="value" id="m_avg_litter_size">—</div></div>
+      <div class="card"><div class="label">Kit Survival (to wean)</div><div class="value" id="m_survival">—</div></div>
+      <div class="card"><div class="label">Avg Days to Harvest</div><div class="value" id="m_days_to_harvest">—</div></div>
+      <div class="card"><div class="label">Harvested Rabbits</div><div class="value" id="m_harvested">—</div></div>
+    </section>
+
+    <section class="tables" style="margin-top: 12px;">
+      <div class="card todo-card">
+        <div class="card-title">
+          <h2>To-Do</h2>
+          <div class="actions-row">
+            <label class="mini">Kindling window
+              <select id="todo_kindling_window">
+                <option value="3">3d</option>
+                <option value="7" selected>7d</option>
+                <option value="14">14d</option>
+                <option value="21">21d</option>
+              </select>
+            </label>
+            <label class="mini">Wean age
+              <select id="todo_wean_age">
+                <option value="35">35d</option>
+                <option value="42" selected>42d</option>
+                <option value="49">49d</option>
+              </select>
+            </label>
+            <label class="mini">Harvest age
+              <select id="todo_harvest_age">
+                <option value="70">70d</option>
+                <option value="84" selected>84d</option>
+                <option value="90">90d</option>
+                <option value="98">98d</option>
+              </select>
+            </label>
+            <button id="todoApplyBtn" type="button">Apply</button>
+          </div>
+        </div>
+        <div class="todo-grid">
+          <div class="todo-col">
+            <div class="todo-head"><div class="todo-title">Kindlings due</div><div class="todo-count" id="todo_kindlings_count">—</div></div>
+            <ul class="todo-list" id="todo_kindlings"></ul>
+          </div>
+          <div class="todo-col">
+            <div class="todo-head"><div class="todo-title">Weanings due</div><div class="todo-count" id="todo_weanings_count">—</div></div>
+            <ul class="todo-list" id="todo_weanings"></ul>
+          </div>
+          <div class="todo-col">
+            <div class="todo-head"><div class="todo-title">Harvest ready</div><div class="todo-count" id="todo_harvest_count">—</div></div>
+            <ul class="todo-list" id="todo_harvest"></ul>
+          </div>
+        </div>
+        <div class="todo-foot" id="todo_asof">—</div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><h2>Recent Breedings</h2><a class="small-link" href="/ranch/breedings">Open</a></div>
+        <div class="table-wrap">
+          <table id="breedingsTable">
+            <thead><tr><th>ID</th><th>Doe</th><th>Buck</th><th>Bred</th><th>Expected</th><th>Result</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><h2>Recent Litters</h2><a class="small-link" href="/ranch/kindlings">Open</a></div>
+        <div class="table-wrap">
+          <table id="littersTable">
+            <thead><tr><th>ID</th><th>Breeding</th><th>Kindled</th><th>Alive</th><th>Dead</th><th>Weaned</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><h2>Recent Harvests</h2><a class="small-link" href="/ranch/harvests">Open</a></div>
+        <div class="table-wrap">
+          <table id="harvestsTable">
+            <thead><tr><th>ID</th><th>Animal</th><th>Date</th><th>Live (g)</th><th>Carcass (g)</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><h2>Recent Animals</h2><a class="small-link" href="/ranch/animals">Open</a></div>
+        <div class="table-wrap">
+          <table id="animalsTable">
+            <thead><tr><th>ID</th><th>Tattoo</th><th>Sex</th><th>Status</th><th>Birth Date</th><th>Breed</th><th>Litter</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="toast" class="toast" hidden></div>
+  <script src="/static/app.js"></script>
+</body>
+</html>

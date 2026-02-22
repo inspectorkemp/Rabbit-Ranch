@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Weanings</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+  <script>(function(){var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);})();</script>
+</head>
+<body data-page="weanings">
+  <header class="header">
+    <div class="brand">
+      <h1>Rabbit Ranch</h1>
+      <nav class="nav">
+        <a href="/dashboard">Dashboard</a>
+        <a href="/ranch/animals">Animals</a>
+        <a href="/ranch/breedings">Breedings</a>
+        <a href="/ranch/kindlings">Kindlings</a>
+        <a class="active" href="/ranch/weanings">Weanings</a>
+        <a href="/ranch/harvests">Harvests</a>
+        <a href="/ranch/sales">Sales</a>
+        <a href="/ranch/feed-costs">Feed Costs</a>
+        <a href="/ranch/reports">Reports</a>
+      </nav>
+    </div>
+    <div class="header-actions">
+            <button id="themeToggle" class="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">🌙</button>
+      <button id="refreshBtn">Refresh</button>
+      <a href="/docs" target="_blank" rel="noopener">API Docs</a>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="two-col">
+      <div class="card">
+        <h2>Generate Kits (at Weaning)</h2>
+        <form id="generateKitsForm" class="form">
+          <label>Litter
+            <select id="litterForWeaning" name="litter_id" required>
+              <option value="">Select litter…</option>
+            </select>
+          </label>
+          <label>Weaned Count<input type="number" name="weaned_count" min="1" required /></label>
+          <label>Male Count<input type="number" name="male_count" min="0" /></label>
+          <label>Female Count<input type="number" name="female_count" min="0" /></label>
+          <label>Tattoo Prefix<input name="tattoo_prefix" placeholder="Optional (default: L{litter_id}-)" /></label>
+          <button type="submit">Generate</button>
+        </form>
+        <div class="hint">This creates individual Animals linked to the litter via <code>litter_id</code>.</div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <h2>Growouts (Weaned Kits)</h2>
+          <div class="actions-row">
+            <input id="growoutFilter" class="filter" placeholder="Filter (litter/tattoo/sex)…" />
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table id="growoutsTable">
+            <thead><tr><th>ID</th><th>Tattoo</th><th>Sex</th><th>Status</th><th>Birth Date</th><th>Litter</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="toast" class="toast" hidden></div>
+  <script src="/static/app.js"></script>
+</body>
+</html>

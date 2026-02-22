@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Reports</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+  <script>(function(){var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);})();</script>
+</head>
+<body data-page="reports">
+  <header class="header">
+    <div class="brand">
+      <h1>Rabbit Ranch</h1>
+      <nav class="nav">
+        <a href="/dashboard">Dashboard</a>
+        <a href="/ranch/animals">Animals</a>
+        <a href="/ranch/breedings">Breedings</a>
+        <a href="/ranch/kindlings">Kindlings</a>
+        <a href="/ranch/weanings">Weanings</a>
+        <a href="/ranch/harvests">Harvests</a>
+        <a href="/ranch/sales">Sales</a>
+        <a href="/ranch/feed-costs">Feed Costs</a>
+        <a class="active" href="/ranch/reports">Reports</a>
+      </nav>
+    </div>
+    <div class="header-actions">
+            <button id="themeToggle" class="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">🌙</button>
+      <button id="refreshBtn">Refresh</button>
+      <a href="/docs" target="_blank" rel="noopener">API Docs</a>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="two-col">
+      <div class="card">
+        <h2>Visual Reports</h2>
+        <p class="hint">Pick an optional date range and click Apply to update KPI tiles and charts. If no dates are set, this shows all-time.</p>
+
+        <form id="visualReportsForm" class="form" autocomplete="off">
+          <label>Start Date<input type="date" id="vr_start" name="start_date" /></label>
+          <label>End Date<input type="date" id="vr_end" name="end_date" /></label>
+          <button id="vr_apply" type="submit">Apply</button>
+        </form>
+
+        <div class="hint" id="vr_range">—</div>
+
+        <!-- Production KPIs -->
+        <div class="grid" style="grid-template-columns: repeat(3, 1fr); margin-top: 12px;">
+          <div class="card" style="padding: 10px;">
+            <div class="label">Litters</div>
+            <div class="value" id="k_litters">—</div>
+          </div>
+          <div class="card" style="padding: 10px;">
+            <div class="label">Avg Litter Size</div>
+            <div class="value" id="k_avg_litter">—</div>
+          </div>
+          <div class="card" style="padding: 10px;">
+            <div class="label">Survival to Wean</div>
+            <div class="value" id="k_survival">—</div>
+          </div>
+          <div class="card" style="padding: 10px;">
+            <div class="label">Harvests</div>
+            <div class="value" id="k_harvests">—</div>
+          </div>
+          <div class="card" style="padding: 10px;">
+            <div class="label">Avg Days to Harvest</div>
+            <div class="value" id="k_days">—</div>
+          </div>
+          <div class="card" style="padding: 10px;">
+            <div class="label">Avg Yield</div>
+            <div class="value" id="k_yield">—</div>
+          </div>
+          <div class="card" style="padding: 10px; grid-column: 1 / -1;">
+            <div class="label">Mortality</div>
+            <div class="value" id="k_mortality">—</div>
+          </div>
+        </div>
+
+        <!-- Feed Cost KPIs -->
+        <h2 style="margin-top: 16px; margin-bottom: 8px;">Feed Costs</h2>
+        <div class="grid" style="grid-template-columns: repeat(3, 1fr);">
+          <div class="card" style="padding: 10px;">
+            <div class="label">Total Feed Spend</div>
+            <div class="value" id="k_feed_total">—</div>
+          </div>
+          <div class="card" style="padding: 10px;">
+            <div class="label">Avg / Month</div>
+            <div class="value" id="k_feed_per_month">—</div>
+          </div>
+          <div class="card" style="padding: 10px;">
+            <div class="label">Cost / Harvested Rabbit</div>
+            <div class="value" id="k_feed_per_rabbit">—</div>
+          </div>
+        </div>
+
+        <hr class="divider" />
+
+        <!-- Production charts -->
+        <div class="card" style="padding: 10px; margin-bottom: 10px;">
+          <div class="card-title" style="margin-bottom: 6px;">
+            <h2>Litters by Month</h2><span class="hint">count</span>
+          </div>
+          <div id="chart_litters" class="chart"></div>
+        </div>
+
+        <div class="card" style="padding: 10px; margin-bottom: 10px;">
+          <div class="card-title" style="margin-bottom: 6px;">
+            <h2>Weaned by Month</h2><span class="hint">count</span>
+          </div>
+          <div id="chart_weaned" class="chart"></div>
+        </div>
+
+        <div class="card" style="padding: 10px; margin-bottom: 10px;">
+          <div class="card-title" style="margin-bottom: 6px;">
+            <h2>Harvests by Month</h2><span class="hint">count</span>
+          </div>
+          <div id="chart_harvests" class="chart"></div>
+        </div>
+
+        <div class="card" style="padding: 10px; margin-bottom: 10px;">
+          <div class="card-title" style="margin-bottom: 6px;">
+            <h2>Avg Yield by Month</h2><span class="hint">percent</span>
+          </div>
+          <div id="chart_yield" class="chart"></div>
+        </div>
+
+        <!-- Feed cost chart -->
+        <div class="card" style="padding: 10px;">
+          <div class="card-title" style="margin-bottom: 6px;">
+            <h2>Feed Cost by Month</h2><span class="hint">dollars</span>
+          </div>
+          <div id="chart_feed_cost" class="chart"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>CSV Reports</h2>
+        <p class="hint">Raw data export. Optional date range. Each button downloads a CSV.</p>
+
+        <form id="reportsForm" class="form" method="GET">
+          <label>Start Date<input type="date" name="start_date" /></label>
+          <label>End Date<input type="date" name="end_date" /></label>
+          <button type="submit" formaction="/reports/breedings.csv">Download Breedings CSV</button>
+          <button type="submit" formaction="/reports/litters.csv">Download Litters CSV</button>
+          <button type="submit" formaction="/reports/harvests.csv">Download Harvests CSV</button>
+          <button type="submit" formaction="/reports/feed-costs.csv">Download Feed Costs CSV</button>
+        </form>
+
+        <div class="hint" style="margin-top:12px;">
+          Visual JSON endpoint:
+          <ul>
+            <li><code>/reports/summary</code> (optional <code>?start_date=YYYY-MM-DD&amp;end_date=YYYY-MM-DD</code>)</li>
+          </ul>
+        </div>
+
+        <hr class="divider" />
+
+        <h2>Report Notes</h2>
+        <div class="hint">
+          <strong>Survival to wean</strong> uses only litters with a <code>weaned_count</code> recorded.<br/>
+          <strong>Avg yield</strong> uses harvests with both live and carcass weights set.<br/>
+          <strong>Mortality</strong> uses animals with status <code>deceased</code>; date filtering only applies when <code>death_date</code> is present.<br/>
+          <strong>Cost / harvested rabbit</strong> divides total feed spend by harvested count in the same date range.
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="toast" class="toast" hidden></div>
+  <script src="/static/app.js"></script>
+</body>
+</html>
