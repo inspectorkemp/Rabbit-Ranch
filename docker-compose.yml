@@ -1,0 +1,14 @@
+services:
+  rabbit_tracker:
+    build: .
+    container_name: rabbit_tracker
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=sqlite:////data/rabbit_tracker.db
+    volumes:
+      - rabbit_data:/data
+    restart: unless-stopped
+
+volumes:
+  rabbit_data:
